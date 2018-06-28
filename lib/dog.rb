@@ -1,8 +1,7 @@
 class Dog
-  attr_accessor :name, :breed
-  attr_reader :id
+  attr_accessor :id, :name, :breed
 
-  def initialiize(id: nil, name:, breed:)
+  def initialize(id: nil, name:, breed:)
     @id = id
     @name = name
     @breed = breed
@@ -10,19 +9,19 @@ class Dog
 
   def self.create_table
     sql = <<-SQL
-    CREATE TABLE IF NOT EXISTS dogs (
-      id INTEGER PRIMARY KEY,
-      name TEXT,
-      breed TEXT
-    )
-    SQL
+      CREATE TABLE IF NOT EXISTS dogs (
+        id INTEGER PRIMARY KEY,
+        name TEXT,
+        breed TEXT
+      );
+      SQL
 
-    DB[:conn].execute(sql)
-  end
+      DB[:conn].execute(sql)
+    end
 
   def self.drop_table
     sql = <<-SQL
-    DROP TABLE IF EXISTS dogs;
+      DROP TABLE IF EXISTS dogs;
     SQL
 
     DB[:conn].execute(sql)
@@ -33,8 +32,8 @@ class Dog
       self.update
     else
       sql = <<-SQL
-      INSERT INTO dogs (name, breed) VALUES (?, ?);
-      SQL
+        INSERT INTO dogs (name, breed) VALUES (?, ?);
+        SQL
 
       DB[:conn].execute(sql, self.name, self.breed)
 
@@ -51,11 +50,11 @@ class Dog
 
   def self.find_by_id(id)
     sql = <<-SQL
-    SELECT *
-    FROM dogs
-    WHERE id = ?
-    LIMIT 1
-    SQL
+      SELECT *
+      FROM dogs
+      WHERE id = ?
+      LIMIT 1
+      SQL
 
     DB[:conn].execute(sql, id).map do |row|
       self.new_from_db(row)
@@ -84,11 +83,11 @@ class Dog
 
   def self.find_by_name(name)
     sql = <<-SQL
-    SELECT *
-    FROM dogs
-    WHERE name = ?
-    LIMIT 1
-    SQL
+      SELECT *
+      FROM dogs
+      WHERE name = ?
+      LIMIT 1
+      SQL
 
     DB[:conn].execute(sql, name).map do |row|
       self.new_from_db(row)
@@ -97,12 +96,12 @@ class Dog
 
   def update
     sql = <<-SQL
-    UPDATE dogs
-    SET name = ?, breed = ?
-    WHERE id = ?;
-    SQL
+      UPDATE dogs
+      SET name = ?, breed = ?
+      WHERE id = ?;
+      SQL
 
     DB[:conn].execute(sql, self.name, self.breed, self.id)
   end
+
 end
-  
